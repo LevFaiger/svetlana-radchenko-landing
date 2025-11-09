@@ -38,12 +38,13 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://svetlana-radchenko.ru'),
+  metadataBase: new URL('https://www.finmodel.guru'),
   alternates: {
     canonical: '/',
     languages: {
       'ru': '/',
-      'en': '/en'
+      'en': '/en/',
+      'x-default': '/'
     }
   },
   openGraph: {
