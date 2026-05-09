@@ -19,9 +19,32 @@ export function Navigation(): ReactElement {
   const { t, locale } = useTranslation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Ensure links work on plain object hosting by pointing to explicit index.html
+  const ensureIndexHtml = (path: string): string => {
+    if (!path) return '/index.html';
+    // If it already points to a file (has an extension), keep as is
+    if (/\.[a-zA-Z0-9]+$/.test(path)) return path;
+    // Normalize and append index.html
+    return path.endsWith('/') ? `${path}index.html` : `${path}/index.html`;
+  };
+
+  // For website endpoint we prefer pretty URLs with trailing slash
+  const ensureTrailingSlash = (path: string): string => {
+    if (!path || path === '/') return '/';
+    // If it already points to a file (has an extension), keep as is
+    if (/\.[a-zA-Z0-9]+$/.test(path)) return path;
+    return path.endsWith('/') ? path : `${path}/`;
+  };
+
+  // Detect when we are on the Object Storage HTTPS endpoint
+  const isObjectEndpoint =
+    typeof window !== 'undefined' &&
+    window.location.hostname.endsWith('.storage.yandexcloud.net');
+
   const getLocalizedHref = (href: string, targetLocale?: string) => {
     const currentLocale = targetLocale || locale;
-    return currentLocale === 'ru' ? href : `/${currentLocale}${href}`;
+    const localized = currentLocale === 'ru' ? href : `/${currentLocale}${href}`;
+    return isObjectEndpoint ? ensureIndexHtml(localized) : ensureTrailingSlash(localized);
   };
 
   const navigationItems = [
@@ -37,7 +60,8 @@ export function Navigation(): ReactElement {
     if (pathname.startsWith('/en')) {
       newPath = pathname.substring(3) || '/';
     }
-    const targetPath = newLocale === 'ru' ? newPath : `/${newLocale}${newPath}`;
+    const basePath = isObjectEndpoint ? ensureIndexHtml(newPath) : ensureTrailingSlash(newPath);
+    const targetPath = newLocale === 'ru' ? basePath : `/${newLocale}${basePath}`;
     window.location.href = targetPath;
   };
 

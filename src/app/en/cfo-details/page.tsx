@@ -177,7 +177,7 @@ export default function EnglishCfoDetailsPage(): ReactElement {
         {/* Block 4: Formats and Pricing */}
         <section className="mb-16">
           <h2 className="text-3xl font-bold text-brand-primary mb-8 text-center">
-            Formats and Pricing
+            Formats
           </h2>
           
           <div className="bg-white rounded-2xl p-8 shadow-sm overflow-x-auto">
@@ -186,7 +186,6 @@ export default function EnglishCfoDetailsPage(): ReactElement {
                 <tr className="border-b border-gray-200">
                   <th className="text-left py-4 px-4 font-bold text-brand-primary">Format</th>
                   <th className="text-left py-4 px-4 font-bold text-brand-primary">Suitable for</th>
-                  <th className="text-left py-4 px-4 font-bold text-brand-primary">Price from</th>
                 </tr>
               </thead>
               <tbody>
@@ -197,9 +196,6 @@ export default function EnglishCfoDetailsPage(): ReactElement {
                     </td>
                     <td className="py-4 px-4 text-text-secondary">
                       {item.suitable}
-                    </td>
-                    <td className="py-4 px-4 text-brand-primary font-semibold">
-                      {item.price}
                     </td>
                   </tr>
                 ))}
