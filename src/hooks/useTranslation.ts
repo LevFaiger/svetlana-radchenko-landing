@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import ruTranslations from '../locales/ru.json';
 import enTranslations from '../locales/en.json';
+import type { Locale } from '@/lib/site-config';
 
 type TranslationKey = string;
 
@@ -15,7 +16,7 @@ export function useTranslation() {
   const pathname = usePathname();
   
   // Extract locale from pathname or default to 'ru'
-  const locale = pathname?.startsWith('/en') ? 'en' : 'ru';
+  const locale: Locale = pathname?.startsWith('/en') ? 'en' : 'ru';
 
   const t = (key: TranslationKey): string => {
     const keys = key.split('.');

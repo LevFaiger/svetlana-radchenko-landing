@@ -9,6 +9,7 @@ import { ReactElement } from 'react';
 import { Button } from '@/components/ui/Button';
 import { getConsultationMailtoLink, EMAIL_SUBJECTS } from '@/lib/email-tracking';
 import { cn } from '@/lib/utils';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export interface ConsultationButtonProps {
   /** Source page where the button is displayed */
@@ -19,7 +20,7 @@ export interface ConsultationButtonProps {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'link';
   /** Button size */
   size?: 'sm' | 'md' | 'lg';
-  /** Custom button text (defaults to Russian text from PRD) */
+  /** Custom button text (defaults to the localized hero CTA) */
   children?: React.ReactNode;
   /** Whether to show loading state */
   loading?: boolean;
@@ -52,7 +53,8 @@ export function ConsultationButton({
   loading = false,
   disabled = false,
 }: ConsultationButtonProps): ReactElement {
-  
+  const { t, locale } = useTranslation();
+
   /**
    * Handle consultation button click
    * Tracks email click with client-side analytics
@@ -70,12 +72,13 @@ export function ConsultationButton({
     // Console log for basic tracking (can be removed in production)
     console.log('Email tracking:', {
       subject: EMAIL_SUBJECTS.CONSULTATION,
+      locale,
       source_page: sourcePage,
       timestamp: new Date().toISOString()
     });
   };
 
-  const mailtoLink = getConsultationMailtoLink();
+  const mailtoLink = getConsultationMailtoLink(locale);
 
   return (
     <Button
@@ -91,7 +94,7 @@ export function ConsultationButton({
       loading={loading}
       external={false}
     >
-      {children || 'Записаться на консультацию'}
+      {children || t('hero.cta')}
     </Button>
   );
 }

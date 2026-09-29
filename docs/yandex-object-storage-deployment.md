@@ -127,3 +127,46 @@ curl -I http://finmodel.guru.website.yandexcloud.net/_next/static/css/9dbe6... .
 - Build config (`next.config.js`) uses `output: 'export'` and `trailingSlash: true` to generate static pages under directories with `index.html` files.
 
 
+
+### 5) English version: build-time settings (GA4, Search Console)
+
+The RU and EN versions use separate root layouts (`src/app/(ru)/layout.tsx` and
+`src/app/(en)/en/layout.tsx`). Yandex.Metrika is loaded on RU pages only; EN pages
+load Google Analytics 4 when a measurement ID is provided at build time.
+
+```bash
+cp .env.example .env.local
+# NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX          (GA4 → Admin → Data Streams)
+# NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=<token>        (Search Console → HTML tag, content="...")
+npm run export
+```
+
+Without these variables the GA4 script and the verification meta tag are omitted
+from the EN pages (no placeholders are ever emitted).
+
+### 6) Canonical host: 301 redirect finmodel.guru → www.finmodel.guru
+
+All canonical URLs, hreflang links and the sitemap use `https://www.finmodel.guru`.
+A static export cannot issue redirects itself, so the redirect must be configured
+on the hosting side. With Yandex Object Storage, serve the apex domain from a
+second bucket named exactly `finmodel.guru` whose only job is to redirect:
+
+```bash
+yc storage bucket create --name finmodel.guru
+yc storage bucket update finmodel.guru \
+  --public-read \
+  --website-settings '{"redirectAllRequests":{"protocol":"https","hostname":"www.finmodel.guru"}}'
+```
+
+Then point the apex DNS record (ALIAS/ANAME or A via CDN) at that bucket's website
+endpoint. If the site is fronted by a CDN, configure the host redirect there instead.
+
+### 7) Sitemap and Search Console
+
+`https://www.finmodel.guru/sitemap.xml` lists every RU and EN page with
+`xhtml:link` hreflang alternates. After each deploy:
+
+1. Google Search Console → Sitemaps → submit `https://www.finmodel.guru/sitemap.xml`.
+2. Check a couple of EN URLs with the URL Inspection tool (canonical must be the EN URL).
+3. Check `https://www.finmodel.guru/en/` and `/en/services/` in LinkedIn Post Inspector
+   to confirm the English title, description and `og:image` (`/images/og-image-en.jpg`).

@@ -8,6 +8,11 @@ const nextConfig = {
   turbopack: {
     // Turbopack configuration for development
   },
+  experimental: {
+    // Global 404 page rendering its own <html>/<body>; required because the
+    // RU and EN versions use separate root layouts (route groups).
+    globalNotFound: true,
+  },
   images: {
     unoptimized: true, // Disable Next.js image optimization for static export
     formats: ['image/webp', 'image/avif'],

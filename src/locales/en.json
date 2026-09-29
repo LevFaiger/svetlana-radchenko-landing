@@ -13,20 +13,23 @@
       "mentor": "Mentor"
     },
     "description": "I help see business in numbers, find growth points and move towards goals. I work at the intersection of analytics and empathy: I analyze business as a system and help make smart, precise decisions.",
-    "cta": "Send Request"
+    "cta": "Send Request",
+    "imageAlt": "Svetlana Radchenko — finance and strategy expert"
   },
   "footer": {
     "email": "FinModelGuru@gmail.com",
     "whatsapp": "WhatsApp",
     "telegram": "@FinModelGuru",
-    "copyright": "© FinModelGuru 2025"
+    "copyright": "© FinModelGuru",
+    "linkedin": "LinkedIn",
+    "location": "Based in Haifa, Israel · Working internationally"
   },
   "about": {
     "title": "About Me & How I Can Help",
-    "intro": "Finance practitioner with 26+ years of experience in financial management and project development. Ex-CFO of Bioprocess Group and Irish public company Ovoca Bio plc, PhD in Economics, mentor, lecturer and expert at the 'Towards Change' foundation. Consultant for accelerators, universities, international programs and moderator of events at Zarubezhexpo.",
+    "intro": "Finance practitioner: 26+ years in finance, 17+ as CFO and board member. Founder of Carota — evidence-based startup evaluation & portfolio monitoring. Former CFO and board member of Ovoca Bio plc (London and Irish stock exchanges), PhD in Economics, ACCA, mentor, lecturer and expert at the 'Towards Change' foundation. Consultant for accelerators, universities, international programs and moderator of events at Zarubezhexpo.",
     "facts": {
-      "title": "Finance practitioner with 26+ years of experience in financial management and project development, including international and public companies.",
-      "cfo": "Ex-CFO of Bioprocess Group and Irish public company Ovoca Bio plc",
+      "title": "Finance practitioner with 26+ years in finance, 17+ as CFO and board member, in financial management and project development, including international and public companies.",
+      "cfo": "Former CFO and board member of Ovoca Bio plc, listed on the London and Irish stock exchanges",
       "academic": "PhD in Economics, lecturer, mentor and expert at \"Towards Change\" foundation",
       "consultant": "Consultant for accelerators, universities and international programs",
       "moderator": "Moderator and speaker at business events, including Zarubezhexpo business forums"
@@ -75,7 +78,10 @@
       "title": "Direct Contact",
       "email": "Email",
       "phone": "Phone",
-      "telegram": "Telegram"
+      "telegram": "Telegram",
+      "whatsapp": "WhatsApp",
+      "linkedin": "LinkedIn",
+      "location": "Based in Haifa, Israel · Working internationally"
     },
     "cta": {
       "title": "Let's work together",

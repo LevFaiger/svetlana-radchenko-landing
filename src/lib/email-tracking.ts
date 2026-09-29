@@ -4,6 +4,7 @@
  */
 
 import { emailTrackingRequestSchema, type EmailTrackingRequest } from './schemas';
+import type { Locale } from './site-config';
 
 /**
  * Generate mailto link with pre-filled content
@@ -27,38 +28,56 @@ export function generateMailtoLink(options: {
   cc?: string;
   bcc?: string;
 }): string {
-  const params = new URLSearchParams();
-  
+  // encodeURIComponent (not URLSearchParams) so spaces become %20, which every
+  // mail client decodes; '+' is shown literally by many clients.
+  const params: string[] = [];
+
   if (options.subject) {
-    params.append('subject', options.subject);
+    params.push(`subject=${encodeURIComponent(options.subject)}`);
   }
-  
+
   if (options.body) {
-    params.append('body', options.body);
+    params.push(`body=${encodeURIComponent(options.body)}`);
   }
-  
+
   if (options.cc) {
-    params.append('cc', options.cc);
+    params.push(`cc=${encodeURIComponent(options.cc)}`);
   }
-  
+
   if (options.bcc) {
-    params.append('bcc', options.bcc);
+    params.push(`bcc=${encodeURIComponent(options.bcc)}`);
   }
-  
-  const queryString = params.toString();
+
+  const queryString = params.join('&');
   return `mailto:${options.to}${queryString ? `?${queryString}` : ''}`;
 }
 
 /**
- * Get consultation mailto link (as per PRD requirements)
- * 
- * @returns Formatted mailto URL for consultation
+ * Pre-filled consultation email per locale.
  */
-export function getConsultationMailtoLink(): string {
-  return generateMailtoLink({
-    to: 'finmodelguru@gmail.com',
+export const CONSULTATION_EMAIL: Record<Locale, { subject: string; body: string }> = {
+  ru: {
     subject: 'Консультация',
     body: 'Здравствуйте, я хочу записаться на консультацию.',
+  },
+  en: {
+    subject: 'Consultation request',
+    body: 'Hello Svetlana, I would like to discuss a consultation. My company / project: ',
+  },
+};
+
+/**
+ * Get consultation mailto link (as per PRD requirements)
+ *
+ * @param locale - Site locale; selects the subject/body language
+ * @returns Formatted mailto URL for consultation
+ */
+export function getConsultationMailtoLink(locale: Locale = 'ru'): string {
+  const { subject, body } = CONSULTATION_EMAIL[locale];
+  return generateMailtoLink({
+    to: 'finmodelguru@gmail.com',
+    subject,
+    body,
   });
 }
 

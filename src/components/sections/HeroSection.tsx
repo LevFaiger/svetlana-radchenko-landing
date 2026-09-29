@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { ConsultationButton } from '@/components/forms/ConsultationButton';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/useTranslation';
+import { CarotaLine } from '@/components/content/CarotaLine';
 
 export interface HeroSectionProps {
   /** Additional CSS classes */
@@ -29,7 +30,7 @@ export interface HeroSectionProps {
  * ```
  */
 export function HeroSection({ className }: HeroSectionProps): ReactElement {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   
   return (
     <section className={cn(
@@ -49,6 +50,12 @@ export function HeroSection({ className }: HeroSectionProps): ReactElement {
               {t('hero.roles.teacher')}<br />
               {t('hero.roles.mentor')}
             </p>
+
+            {locale === 'en' && (
+              <p className="text-base md:text-lg text-text-primary mb-6 max-w-xl mx-auto lg:mx-0">
+                <CarotaLine />
+              </p>
+            )}
             
             <div className="space-y-4 mb-8">
               <p className="text-base md:text-lg text-text-secondary max-w-xl mx-auto lg:mx-0">
@@ -74,7 +81,7 @@ export function HeroSection({ className }: HeroSectionProps): ReactElement {
               <div className="aspect-[3/4] relative rounded-2xl overflow-hidden shadow-2xl">
                 <Image
                   src="/images/image3.jpeg"
-                  alt="Светлана Радченко - Эксперт в сфере финансов и стратегии"
+                  alt={t('hero.imageAlt')}
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
