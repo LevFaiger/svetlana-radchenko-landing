@@ -15,7 +15,8 @@ export default function GlobalNotFound(): ReactElement {
       <head>
         <title>Page not found | FinModel.Guru</title>
         <meta name="robots" content="noindex" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" href="/favicon.ico?v=2" sizes="32x32" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
       </head>
       <body className="antialiased min-h-screen flex items-center justify-center bg-bg-primary px-4">
         <div className="text-center">

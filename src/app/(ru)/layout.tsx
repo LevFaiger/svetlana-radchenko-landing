@@ -106,8 +106,11 @@ export default function RootLayout({ children }: RootLayoutProps): ReactElement 
   return (
     <html lang="ru" className={inter.variable}>
       <head>
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="icon" href="/favicon.ico?v=2" sizes="32x32" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=2" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2" />
+        <link rel="manifest" href="/site.webmanifest?v=2" />
         <meta name="theme-color" content="#A26769" />
         <meta name="msapplication-TileColor" content="#A26769" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
