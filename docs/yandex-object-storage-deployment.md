@@ -4,7 +4,7 @@ This project is exported as a static site and hosted from a Yandex Object Storag
 
 ### Prerequisites
 - Yandex Cloud CLI authenticated and configured (profile: `sveta`).
-- Bucket: `lending` in folder `b1glqojh3e5n2otaiv1c`.
+- Production bucket: `finmodel.guru` (serves https://finmodel.guru). The `lending` bucket is an old copy and is not served; `www.finmodel.guru` is a redirect-only bucket.
 
 ### 1) Build static export
 
@@ -19,38 +19,38 @@ npm run export
 
 First pass (all files):
 ```bash
-yc storage s3 cp --recursive out/ s3://lending/
+yc storage s3 cp --recursive out/ s3://finmodel.guru/
 ```
 
 Force correct MIME types for key asset classes (prevents “text/plain” on CSS/JS):
 ```bash
 # HTML
-find out -name '*.html' -print0 | xargs -0 -I{} sh -c 'k="${1#out/}"; yc storage s3 cp "$1" "s3://lending/$k" --content-type text/html --no-guess-mime-type' _ {}
+find out -name '*.html' -print0 | xargs -0 -I{} sh -c 'k="${1#out/}"; yc storage s3 cp "$1" "s3://finmodel.guru/$k" --content-type text/html --no-guess-mime-type' _ {}
 
 # CSS
-find out -name '*.css' -print0 | xargs -0 -I{} sh -c 'k="${1#out/}"; yc storage s3 cp "$1" "s3://lending/$k" --content-type text/css --no-guess-mime-type' _ {}
+find out -name '*.css' -print0 | xargs -0 -I{} sh -c 'k="${1#out/}"; yc storage s3 cp "$1" "s3://finmodel.guru/$k" --content-type text/css --no-guess-mime-type' _ {}
 
 # JS
-find out -name '*.js' -print0 | xargs -0 -I{} sh -c 'k="${1#out/}"; yc storage s3 cp "$1" "s3://lending/$k" --content-type application/javascript --no-guess-mime-type' _ {}
+find out -name '*.js' -print0 | xargs -0 -I{} sh -c 'k="${1#out/}"; yc storage s3 cp "$1" "s3://finmodel.guru/$k" --content-type application/javascript --no-guess-mime-type' _ {}
 
 # Fonts
-find out -name '*.woff2' -print0 | xargs -0 -I{} sh -c 'k="${1#out/}"; yc storage s3 cp "$1" "s3://lending/$k" --content-type font/woff2 --no-guess-mime-type' _ {}
+find out -name '*.woff2' -print0 | xargs -0 -I{} sh -c 'k="${1#out/}"; yc storage s3 cp "$1" "s3://finmodel.guru/$k" --content-type font/woff2 --no-guess-mime-type' _ {}
 
 # Optional images (usually guessed correctly, include if needed)
-find out -name '*.png'  -print0 | xargs -0 -I{} sh -c 'k="${1#out/}"; yc storage s3 cp "$1" "s3://lending/$k" --content-type image/png  --no-guess-mime-type' _ {}
-find out -name '*.jpg'  -print0 | xargs -0 -I{} sh -c 'k="${1#out/}"; yc storage s3 cp "$1" "s3://lending/$k" --content-type image/jpeg --no-guess-mime-type' _ {}
-find out -name '*.jpeg' -print0 | xargs -0 -I{} sh -c 'k="${1#out/}"; yc storage s3 cp "$1" "s3://lending/$k" --content-type image/jpeg --no-guess-mime-type' _ {}
+find out -name '*.png'  -print0 | xargs -0 -I{} sh -c 'k="${1#out/}"; yc storage s3 cp "$1" "s3://finmodel.guru/$k" --content-type image/png  --no-guess-mime-type' _ {}
+find out -name '*.jpg'  -print0 | xargs -0 -I{} sh -c 'k="${1#out/}"; yc storage s3 cp "$1" "s3://finmodel.guru/$k" --content-type image/jpeg --no-guess-mime-type' _ {}
+find out -name '*.jpeg' -print0 | xargs -0 -I{} sh -c 'k="${1#out/}"; yc storage s3 cp "$1" "s3://finmodel.guru/$k" --content-type image/jpeg --no-guess-mime-type' _ {}
 ```
 
 Recommended cleanup:
 ```bash
-yc storage s3 rm s3://lending/.DS_Store || true
+yc storage s3 rm s3://finmodel.guru/.DS_Store || true
 ```
 
 ### 3) Make bucket public and set website documents
 
 ```bash
-yc storage bucket update lending \
+yc storage bucket update finmodel.guru \
   --public-read \
   --website-settings '{"index":"index.html","error":"404.html"}'
 ```
@@ -144,29 +144,20 @@ npm run export
 Without these variables the GA4 script and the verification meta tag are omitted
 from the EN pages (no placeholders are ever emitted).
 
-### 6) Canonical host: 301 redirect finmodel.guru → www.finmodel.guru
+### 6) Canonical host: bare finmodel.guru (www redirects here)
 
-All canonical URLs, hreflang links and the sitemap use `https://www.finmodel.guru`.
-A static export cannot issue redirects itself, so the redirect must be configured
-on the hosting side. With Yandex Object Storage, serve the apex domain from a
-second bucket named exactly `finmodel.guru` whose only job is to redirect:
-
-```bash
-yc storage bucket create --name finmodel.guru
-yc storage bucket update finmodel.guru \
-  --public-read \
-  --website-settings '{"redirectAllRequests":{"protocol":"https","hostname":"www.finmodel.guru"}}'
-```
-
-Then point the apex DNS record (ALIAS/ANAME or A via CDN) at that bucket's website
-endpoint. If the site is fronted by a CDN, configure the host redirect there instead.
+All canonical URLs, hreflang links, robots.txt and the sitemap use
+`https://finmodel.guru` (`SITE_URL` in `src/lib/site-config.ts`). The
+`www.finmodel.guru` bucket is configured with `redirect_all_requests` to
+`https://finmodel.guru`, so both hosts resolve to one canonical version.
+Do not change one side without the other.
 
 ### 7) Sitemap and Search Console
 
-`https://www.finmodel.guru/sitemap.xml` lists every RU and EN page with
+`https://finmodel.guru/sitemap.xml` lists every RU and EN page with
 `xhtml:link` hreflang alternates. After each deploy:
 
-1. Google Search Console → Sitemaps → submit `https://www.finmodel.guru/sitemap.xml`.
+1. Google Search Console → Sitemaps → submit `https://finmodel.guru/sitemap.xml` (property: URL prefix `https://finmodel.guru/`).
 2. Check a couple of EN URLs with the URL Inspection tool (canonical must be the EN URL).
-3. Check `https://www.finmodel.guru/en/` and `/en/services/` in LinkedIn Post Inspector
+3. Check `https://finmodel.guru/en/` and `/en/services/` in LinkedIn Post Inspector
    to confirm the English title, description and `og:image` (`/images/og-image-en.jpg`).

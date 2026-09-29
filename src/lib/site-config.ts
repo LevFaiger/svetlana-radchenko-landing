@@ -8,8 +8,11 @@
 
 export type Locale = 'ru' | 'en';
 
-/** Canonical origin (www is the canonical host). */
-export const SITE_URL = 'https://www.finmodel.guru';
+/**
+ * Canonical origin. The bare domain is canonical: Yandex hosting 301-redirects
+ * www.finmodel.guru to finmodel.guru (see docs/yandex-object-storage-deployment.md).
+ */
+export const SITE_URL = 'https://finmodel.guru';
 
 export const SITE_EMAIL = 'FinModelGuru@gmail.com';
 

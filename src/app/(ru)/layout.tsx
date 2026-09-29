@@ -8,6 +8,7 @@ import { Inter } from 'next/font/google';
 import { ReactElement, Suspense } from 'react';
 import YandexMetrika from '@/components/analytics/YandexMetrika';
 import { Footer } from '@/components/layout/Footer';
+import { SITE_URL } from '@/lib/site-config';
 import '@/styles/globals.css';
 
 const inter = Inter({ 
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://www.finmodel.guru'),
+  metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: '/',
     languages: {
